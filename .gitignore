@@ -486,3 +486,7 @@ $RECYCLE.BIN/
 # Seguridad del Proyecto SSF
 appsettings.json
 appsettings.Development.json
+
+# Forzar la inclusión de los proyectos de la solución
+!*.csproj
+/SSF.slnLaunch
