@@ -21,6 +21,7 @@ namespace SSF.Data.Context
         public DbSet<VentaDetalle> VentaDetalles { get; set; }
         public DbSet<VentaPago> VentaPagos { get; set; }
         public DbSet<MedioPago> MediosPago { get; set; }
+        public DbSet<LogAuditoria> LogsAuditoria { get; set; }
         // Acá aplicamos la configuración avanzada con Fluent API
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -244,6 +245,29 @@ namespace SSF.Data.Context
 
                 // Agiliza el cierre de caja por medio de pago (Efectivo, MP, etc)
                 entity.HasIndex(vp => new { vp.VentaId, vp.MedioPagoId }).HasDatabaseName("IDX_VentaPagos_VentaMedio");
+            });
+
+            modelBuilder.Entity<LogAuditoria>(entity =>
+            {
+                // Cambiamos esto para especificar el esquema 'Seguridad'
+                entity.ToTable("LogsAuditoria", "Seguridad");
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Accion).HasMaxLength(100).IsRequired();
+                entity.Property(e => e.Detalle).IsRequired();
+                entity.Property(e => e.IpDireccion).HasMaxLength(45).IsRequired();
+
+                // Relaciones (quedan igual)
+                entity.HasOne(d => d.Usuario)
+                      .WithMany()
+                      .HasForeignKey(d => d.IdUsuario)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(d => d.Sucursal)
+                      .WithMany()
+                      .HasForeignKey(d => d.IdSucursal)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             //INYECCIÓN DE DATOS INICIALES (Data Seeding)
