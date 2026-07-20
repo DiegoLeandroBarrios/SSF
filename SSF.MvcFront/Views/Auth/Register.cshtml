@@ -1,0 +1,188 @@
+﻿@{
+    ViewData["Title"] = "Crear Cuenta";
+}
+
+<div class="login-container">
+
+    <!-- Identidad del sistema -->
+    <div class="text-center mb-4">
+        <svg class="mb-2" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 2L4 16L32 30L60 16L32 2Z" stroke="#2B8A3E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M4 16V48L32 62V30L4 16Z" stroke="#2B8A3E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M60 16V48L32 62V30L60 16Z" stroke="#2B8A3E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M18 23V39" stroke="#2B8A3E" stroke-width="2" stroke-linecap="round" />
+            <path d="M46 23V39" stroke="#2B8A3E" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <h2 class="h4 fw-bold mb-1" style="letter-spacing: 1px;">CONTROL DE STOCK</h2>
+        <p class="mb-4 custom-text-muted text-xs">Administra el stock de todos tus productos</p>
+    </div>
+
+    <!-- Tarjeta del Formulario de Registro -->
+    <div class="custom-card p-4">
+        <h3 class="h5 fw-bold mb-1 text-center">REGISTRARSE</h3>
+        <p class="mb-4 custom-text-muted text-xs text-center">Completa tus datos para crear una nueva cuenta en el sistema</p>
+
+        <form id="registerForm" autocomplete="off">
+
+            <!-- Input: Nombre de usuario -->
+            <div class="mb-3">
+                <label class="form-label small fw-medium mb-2">Nombre de usuario</label>
+                <div class="input-group">
+                    <!-- Cambiamos el icono a "person-vcard" o "person-badge" para que haga juego con un ID/Usuario -->
+                    <span class="input-group-text custom-input-group"><i class="bi bi-person-badge"></i></span>
+                    <input type="text" id="username" class="form-control custom-form-control" placeholder="Crea un nombre de usuario" required style="border-radius: 0 8px 8px 0; padding: 10px;">
+                </div>
+            </div>
+
+            <!-- Input: Correo electrónico -->
+            <div class="mb-3">
+                <label class="form-label small fw-medium mb-2">Correo electrónico</label>
+                <div class="input-group">
+                    <span class="input-group-text custom-input-group"><i class="bi bi-envelope"></i></span>
+                    <input type="email" id="registerEmail" class="form-control custom-form-control" placeholder="Ingresa tu correo electrónico" required style="border-radius: 0 8px 8px 0; padding: 10px;">
+                </div>
+            </div>
+
+            <!-- Input: Selección de Rol -->
+            <div class="mb-4">
+                <label class="form-label small fw-medium mb-2">Rol del usuario</label>
+                <div class="input-group">
+                    <span class="input-group-text custom-input-group"><i class="bi bi-shield-lock"></i></span>
+                    <select id="userRole" class="form-select custom-form-control" required style="border-radius: 0 8px 8px 0; padding: 10px;">
+                        <option value="" disabled selected>Selecciona un rol</option>
+                        <option value="Cajero">Cajero</option>
+                        <option value="Administrador">Administrador</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Input: Contraseña -->
+            <div class="mb-3">
+                <label class="form-label small fw-medium mb-2">Contraseña</label>
+                <div class="input-group">
+                    <span class="input-group-text custom-input-group"><i class="bi bi-lock"></i></span>
+                    <input type="password" id="registerPassword" class="form-control custom-form-control password-input" placeholder="Crea una contraseña segura" required style="padding: 10px;">
+                    <span class="input-group-text custom-input-group password-toggle" id="toggleRegPassword"><i class="bi bi-eye"></i></span>
+                </div>
+            </div>
+
+            <!-- Input: Confirmar Contraseña -->
+            <div class="mb-4">
+                <label class="form-label small fw-medium mb-2">Confirmar contraseña</label>
+                <div class="input-group">
+                    <span class="input-group-text custom-input-group"><i class="bi bi-shield-lock"></i></span>
+                    <input type="password" id="confirmPassword" class="form-control custom-form-control password-input" placeholder="Repite tu contraseña" required style="padding: 10px;">
+                    <span class="input-group-text custom-input-group password-toggle" id="toggleConfirmPassword"><i class="bi bi-eye"></i></span>
+                </div>
+                <!-- Div para mostrar error si las contraseñas no coinciden (oculto por defecto) -->
+                <div id="passwordError" class="text-danger small mt-2 d-none">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Las contraseñas no coinciden.
+                </div>
+            </div>
+
+            <!-- Botón Registrarse -->
+            <button type="submit" class="btn btn-green-submit w-100 py-2 d-flex align-items-center justify-content-center gap-2 mb-3" style="border-radius: 8px;">
+                <i class="bi bi-person-plus"></i> Crear Cuenta
+            </button>
+
+            <!-- Enlace para volver al Login -->
+            @* <div class="text-center">
+                <span class="small custom-text-muted">¿Ya tienes una cuenta?</span>
+                <a asp-controller="Auth" asp-action="Login" class="text-purple-link small ms-1 fw-semibold">Inicia Sesión</a>
+            </div> *@
+        </form>
+    </div>
+
+    <div class="text-center mt-4 custom-text-muted text-xs">
+        &copy; 2026 SSF. Todos los derechos reservados.
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script src="~/js/auth.js" asp-append-version="true"></script>
+    <script>
+        // Lógica visual del ojo para la contraseña de registro
+        const toggleRegPassword = document.querySelector('#toggleRegPassword');
+        const registerPassword = document.querySelector('#registerPassword');
+
+        toggleRegPassword.addEventListener('click', function () {
+            const type = registerPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            registerPassword.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('bi-eye');
+            this.querySelector('i').classList.toggle('bi-eye-slash');
+        });
+
+        // Lógica visual del ojo para confirmar contraseña
+        const toggleConfirmPassword = document.querySelector('#toggleConfirmPassword');
+        const confirmPassword = document.querySelector('#confirmPassword');
+
+        toggleConfirmPassword.addEventListener('click', function () {
+            const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPassword.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('bi-eye');
+            this.querySelector('i').classList.toggle('bi-eye-slash');
+        });
+
+        // Validación en caliente para contraseñas idénticas al escribir
+        const passwordError = document.querySelector('#passwordError');
+
+        confirmPassword.addEventListener('input', function() {
+            if (confirmPassword.value !== registerPassword.value && confirmPassword.value !== "") {
+                passwordError.classList.remove('d-none');
+            } else {
+                passwordError.classList.add('d-none');
+            }
+        });
+
+        // Evento Submit del Formulario (Solo una declaración de registerForm)
+        const registerForm = document.querySelector('#registerForm');
+        registerForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const username = document.querySelector('#username').value;
+            const email = document.querySelector('#registerEmail').value;
+            const passwordVal = registerPassword.value;
+            const confirmVal = confirmPassword.value;
+            const role = document.querySelector('#userRole').value;
+
+            if (passwordVal !== confirmVal) {
+                passwordError.classList.remove('d-none');
+                return;
+            }
+
+            // Deshabilitar botón para evitar doble clic
+            const submitBtn = registerForm.querySelector('button[type="submit"]');
+            const originalBtnHtml = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...`;
+
+            try {
+                // Pasamos los parámetros al Manager
+                await AuthManager.register(username, email, passwordVal, confirmVal, role);
+
+                // 🌟 Alerta exitosa de SweetAlert2 con tu estilo verde
+                MySwal.fire({
+                    title: '¡Registro Exitoso!',
+                    text: 'El usuario ha sido creado correctamente en el sistema.',
+                    icon: 'success'
+                }).then(() => {
+                    window.location.reload(); // Recarga la página limpia una vez que cierran la alerta
+                });
+
+            } catch (error) {
+                // 🌟 Alerta de error estilizada si la API rechaza el registro
+                MySwal.fire({
+                    title: 'No se pudo crear la cuenta',
+                    text: error.message,
+                    icon: 'error'
+                });
+
+                // Si falla, restauramos el botón para que puedan corregir datos y reintentar
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+            }
+        });
+    </script>
+}

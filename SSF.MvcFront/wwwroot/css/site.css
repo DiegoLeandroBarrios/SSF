@@ -29,3 +29,44 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* Customización Global de SweetAlert2 */
+.swal2-popup {
+    border-radius: 16px !important; /* Bordes suaves acordes a tus tarjetas */
+    font-family: inherit !important; /* Hereda la tipografía de tu sistema */
+    background-color: #ffffff !important;
+}
+
+/* Título de las alertas */
+.swal2-title {
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    color: #212529 !important;
+}
+
+/* Texto del cuerpo */
+.swal2-html-container {
+    color: #495057 !important;
+    font-size: 0.95rem !important;
+}
+
+/* Botón de confirmación (Verde de tu sistema) */
+.swal2-confirm.custom-swal-btn-confirm {
+    background-color: #2B8A3E !important;
+    border-color: #2B8A3E !important;
+    border-radius: 8px !important;
+    padding: 10px 24px !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+}
+
+    .swal2-confirm.custom-swal-btn-confirm:hover {
+        background-color: #216a2f !important;
+    }
+
+/* Botón de cancelación / error (Por si usás modales de confirmación de borrado) */
+.swal2-cancel.custom-swal-btn-cancel {
+    border-radius: 8px !important;
+    padding: 10px 24px !important;
+    font-weight: 500 !important;
+}

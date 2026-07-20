@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<div class="login-container">
+
+    <!-- Identidad del sistema -->
+    <div class="text-center mb-4">
+        <svg class="mb-2" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 2L4 16L32 30L60 16L32 2Z" stroke="#2B8A3E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M4 16V48L32 62V30L4 16Z" stroke="#2B8A3E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M60 16V48L32 62V30L60 16Z" stroke="#2B8A3E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M18 23V39" stroke="#2B8A3E" stroke-width="2" stroke-linecap="round" />
+            <path d="M46 23V39" stroke="#2B8A3E" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <h2 class="h4 fw-bold mb-1" style="letter-spacing: 1px;">CONTROL DE STOCK</h2>
+        <p class="mb-4 custom-text-muted text-xs">Administra el stock de todos tus productos</p>
+    </div>
+
+    <!-- Tarjeta del Formulario -->
+    <div class="custom-card p-4">
+        <h3 class="h5 fw-bold mb-1 text-center">INICIAR SESIÓN</h3>
+        <p class="mb-4 custom-text-muted text-xs">Ingresa tus credenciales para acceder al sistema</p>
+
+        <form id="loginForm" autocomplete="off">
+
+            <div class="mb-3">
+                <label class="form-label small fw-medium mb-2">Correo electrónico</label>
+                <div class="input-group">
+                    <span class="input-group-text custom-input-group"><i class="bi bi-envelope"></i></span>
+                    <input type="email" id="email" class="form-control custom-form-control" placeholder="Ingresa tu correo electrónico" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label small fw-medium mb-2">Contraseña</label>
+                <div class="input-group">
+                    <span class="input-group-text custom-input-group"><i class="bi bi-lock"></i></span>
+                    <input type="password" id="password" class="form-control custom-form-control password-input" placeholder="Ingresa tu contraseña" required>
+                    <span class="input-group-text custom-input-group password-toggle" id="togglePassword"><i class="bi bi-eye"></i></span>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe" style="font-size: 0.9rem;">Recordarme</label>
+                </div>
+                <a href="#" class="text-purple-link">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <button type="submit" class="btn btn-green-submit w-100 py-2 d-flex align-items-center justify-content-center gap-2" style="border-radius: 8px;">
+                <i class="bi bi-box-arrow-in-right"></i> Ingresar
+            </button>
+        </form>
+    </div>
+
+    <div class="text-center mt-4 custom-text-muted text-xs">
+        &copy; 2026 SSF. Todos los derechos reservados.
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/auth.js" asp-append-version="true"></script>
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('bi-eye');
+            this.querySelector('i').classList.toggle('bi-eye-slash');
+        });
+
+        // Evento Submit del Formulario
+        const loginForm = document.querySelector('#loginForm');
+        loginForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = document.querySelector('#email').value;
+            const passwordVal = password.value;
+
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            const originalBtnHtml = submitBtn.innerHTML;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Ingresando...`;
+
+            try {
+                // Esperamos la respuesta del login
+                const resultado = await AuthManager.login(email, passwordVal);
+
+                // Si fue exitoso, usamos la redirección que nos mandó tu controlador MVC
+                window.location.href = resultado.redireccion;
+
+            } catch (error) {
+                // Si falló, la promesa lanza el error acá y se activa el SweetAlert
+                MySwal.fire({
+                    title: 'Error de Inicio de Sesión',
+                    text: error.message,
+                    icon: 'error',
+                    confirmButtonColor: '#2B8A3E'
+                });
+
+                // Restauramos el botón
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+            }
+        });
+    </script>
+}

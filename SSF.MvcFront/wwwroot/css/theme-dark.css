@@ -1,0 +1,114 @@
+﻿/* wwwroot/css/theme-dark.css */
+
+/* Paleta de colores global para el modo oscuro */
+:root {
+    --bg-main: #0B111E; /* Fondo general ultra oscuro */
+    --bg-card: #121824; /* Fondo de tarjetas y paneles */
+    --bg-input: #192030; /* Fondo de los campos de texto e inputs */
+    --border-color: #232C3F; /* Bordes sutiles divisores */
+    --text-muted: #8492A6; /* Texto secundario gris */
+    --brand-green: #2B8A3E; /* Verde principal (Botones / Isotipo) */
+    --brand-green-hover: #237032;
+    --accent-purple: #6366F1; /* Morado para enlaces y destaques */
+}
+
+/* Estilos base para las vistas oscuras */
+body.dark-theme {
+    background-color: var(--bg-main);
+    color: #FFFFFF;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Clases comunes de tarjetas e inputs */
+.custom-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.custom-input-group {
+    background-color: var(--bg-input) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-muted) !important;
+}
+
+.custom-form-control {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    color: #FFFFFF;
+}
+
+    .custom-form-control:focus {
+        background-color: var(--bg-input);
+        border-color: var(--brand-green);
+        color: #FFFFFF;
+        box-shadow: none;
+    }
+
+.text-purple-link {
+    color: var(--accent-purple);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+    .text-purple-link:hover {
+        text-decoration: underline;
+    }
+
+.btn-green-submit {
+    background-color: var(--brand-green);
+    border: none;
+    color: white;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+    .btn-green-submit:hover {
+        background-color: var(--brand-green-hover);
+        color: white;
+    }
+
+/* 🔒 Estilos específicos para páginas de Auth (Login y Registro) */
+body.auth-body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 440px;
+    padding: 20px;
+}
+
+.password-toggle {
+    border-radius: 0 8px 8px 0 !important;
+    border-left: none !important;
+    cursor: pointer;
+}
+
+.password-input {
+    border-radius: 0 !important;
+    border-right: none !important;
+}
+
+.form-check-input {
+    background-color: var(--bg-input);
+    border-color: var(--border-color);
+}
+
+    .form-check-input:checked {
+        background-color: var(--brand-green);
+        border-color: var(--brand-green);
+    }
+
+/* Clase de utilidad para texto secundario en el modo oscuro */
+.custom-text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Opcional: una clase para textos pequeños que usemos seguido */
+.text-xs {
+    font-size: 0.85rem !important;
+}
