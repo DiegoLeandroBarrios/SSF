@@ -32,7 +32,7 @@ namespace SSF.Identity.Services
             {
                 #region Validaciones
 
-                if (string.IsNullOrWhiteSpace(request.Username))
+                if (string.IsNullOrWhiteSpace(request.Email))
                 {
                     _log.LogDebug("Login fallido: El campo Username está vacío.");
                     response.Success = false;
@@ -43,7 +43,7 @@ namespace SSF.Identity.Services
                 }
                 if (string.IsNullOrWhiteSpace(request.Password))
                 {
-                    _log.LogDebug("Login fallido para {Username}: El campo Password está vacío.", request.Username);
+                    _log.LogDebug("Login fallido para {Email}: El campo Password está vacío.", request.Email);
                     response.Success = false;
                     response.Message = "La contraseña es obligatoria.";
                     response.Status = (int)StatusCodeType.ValidationError;
@@ -53,16 +53,16 @@ namespace SSF.Identity.Services
 
                 #endregion
 
-                //Buscamos el usuario por su Username e incluimos su Rol
-                _log.LogInformation("Inicio de Busqueda de usuario: {Username}", request.Username);
+                //Buscamos el usuario por su Email e incluimos su Rol
+                _log.LogInformation("Inicio de Busqueda de usuario por email: {Email}", request.Email);
                 var usuario = await _context.Usuarios
                     .Include(u => u.Rol)
-                    .FirstOrDefaultAsync(u => u.Username == request.Username);
+                    .FirstOrDefaultAsync(u => u.Email == request.Email);
 
                 //Si no existe o está desactivado, rebotamos con un null genérico (por seguridad)
                 if (usuario == null || !usuario.Activo)
                 {
-                    _log.LogDebug("Intento de login fallido. Usuario inexistente o inactivo: {Username}", request.Username);
+                    _log.LogDebug("Intento de login fallido. Usuario inexistente o inactivo: {Email}", request.Email);
                     response.Success = false;
                     response.Message = "Usuario inexistente o invalidado.";
                     response.Status = (int)StatusCodeType.ValidationError;
@@ -95,7 +95,7 @@ namespace SSF.Identity.Services
                 };
 
                 // 5. Devolvemos la respuesta armada para el mostrador
-                _log.LogInformation("Usuario: {Username} encontrado con exito", request.Username);
+                _log.LogInformation("Usuario: {Username} encontrado con exito, logueo exitoso!", usuario.Username);
                 response.Success = true;
                 response.Message = "Logueo Exitoso.";
                 response.Data = usuarioDto;
@@ -151,11 +151,11 @@ namespace SSF.Identity.Services
 
                     return response;
                 }
-                if (request.SucursalId <= 0)
+                if (request.Password != request.ConfirmPassword)
                 {
-                    _log.LogDebug("Registro fallido para {Username}: SucursalId inválido ({SucursalId}).", request.Username, request.SucursalId);
+                    _log.LogDebug("Registro fallido para {Username}: Las contraseñas no coinciden.", request.Username);
                     response.Success = false;
-                    response.Message = "Debe asignar una sucursal válida.";
+                    response.Message = "Las contraseñas no coinciden.";
                     response.Status = (int)StatusCodeType.ValidationError;
                     response.Data = false;
 
@@ -176,10 +176,10 @@ namespace SSF.Identity.Services
 
                 // 1. Validamos si ya existe un usuario con ese mismo Username
                 _log.LogInformation("Iniciando solicitud de registro para el usuario: {Username}", request.Username);
-                var existeUsuario = await _context.Usuarios.AnyAsync(u => u.Username == request.Username);
+                var existeUsuario = await _context.Usuarios.AnyAsync(u => u.Email == request.Email);
                 if (existeUsuario)
                 {
-                    _log.LogDebug("No se pudo registrar. El usuario ya existe: {Username}", request.Username);
+                    _log.LogDebug("No se pudo registrar. El usuario ya existe: {Email}", request.Email);
                     response.Success = false;
                     response.Message = "Usuario Existente.";
                     response.Status = (int)StatusCodeType.ValidationError;
